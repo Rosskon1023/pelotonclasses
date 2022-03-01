@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<h1>Peloton Class Detail</h1>
+
+<div class="row">
+    <div class="col s6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{ class.title }}</span>
+                <p>Instructor: {{ class.instructor }}</p>
+                <p>Taken On: {{ class.workoutdate }}</p>
+                <h5>METRICS:</h5>
+                <p>Total Output: {{ class.totoutput }} kj</p>
+                <p>Avg. Output: {{ class.avgoutput }} watts </p>
+                <p>Avg. Resistance: {{ class.avgresistance }}%</p>
+                <p>Avg. Cadence: {{ class.avgcadence}} rpm</p>
+                <p>Total Distance: {{ class.distance}} miles</p>
+            </div>
+            <div class="card-action">
+                <a href="{% url 'classes_update' class.id %}">Edit</a>
+                <a href="{% url 'classes_delete' class.id %}">Delete</a>
+            </div>
+        </div>
+    </div>
+    <div class="col s6">
+        <form action="{% url 'add_artist' class.id %}" method="POST">
+            {% csrf_token %}
+            {{ artist_form.as_p }}
+            <input type="submit" value="Add Artist to this Class" class="btn blue">
+        </form>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Featured Artists in this Class</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for artist in class.artist_set.all %}
+                    <tr>
+                        <td>{{ artist.artist }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+{% endblock %}
